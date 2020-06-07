@@ -1,5 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request,redirect, url_for
 from flask_sqlalchemy import SQLAlchemy 
+from datetime import datetime 
 
 app = Flask(__name__)
 
@@ -37,6 +38,22 @@ def contact():
 @app.route('/add')
 def add():
 	return render_template('add.html')
-	
+
+@app.route('/addpost', methods=['POST'])
+def addpost():
+	title = request.form['title']
+	subtitle = request.form['subtitle']
+	author = request.form['author']
+	content = request.form['content']
+
+	post = Blogpost(title=title, subtitle=subtitle, author=author, content=content, date = datetime.now())
+
+	db.session.add(post)
+	db.session.commit()
+
+
+
+	return redirect(url_for('index'))
+
 if __name__ == "__main__":
 	app.run(debug=True, port=5000, host='0.0.0.0')
