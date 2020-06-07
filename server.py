@@ -1,8 +1,16 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy 
 
 app = Flask(__name__)
 
 app.secret_key = "Supermegasecret"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///blog'
+
+db = SQLAlchemy(app) 
+
+class Blogpost(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
 
 @app.route('/')
 def index():
